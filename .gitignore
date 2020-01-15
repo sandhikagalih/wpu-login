@@ -21,6 +21,11 @@ application/logs/*
 !application/logs/.htaccess
 /vendor/
 
+# My costum
+application/config/config.php
+application/config/database.php
+
+
 ### CodeIgniter Patch ###
 
 ### VisualStudioCode ###
