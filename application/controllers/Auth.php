@@ -1,12 +1,18 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class Auth extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
         $this->load->library('form_validation');
+        require APPPATH.'libraries/phpmailer/src/Exception.php';
+        require APPPATH.'libraries/phpmailer/src/PHPMailer.php';
+        require APPPATH.'libraries/phpmailer/src/SMTP.php';
     }
 
     public function index()
@@ -122,34 +128,37 @@ class Auth extends CI_Controller
 
     private function _sendEmail($token, $type)
     {
-        $config = [
-            'protocol'  => 'smtp',
-            'smtp_host' => 'ssl://smtp.googlemail.com',
-            'smtp_user' => 'wpunpas@gmail.com',
-            'smtp_pass' => '1234567890',
-            'smtp_port' => 465,
-            'mailtype'  => 'html',
-            'charset'   => 'utf-8',
-            'newline'   => "\r\n"
-        ];
-
-        $this->email->initialize($config);
-
-        $this->email->from('wpunpas@gmail.com', 'Web Programming UNPAS');
-        $this->email->to($this->input->post('email'));
+         $response = false;
+         $mail = new PHPMailer();
+                  
+        
+           $mail->isSMTP();
+           $mail->SMTPDebug = 0;
+           $mail->Host     = "mail.server.mail";
+           $mail->SMTPAuth = true;
+           $mail->Username = 'nama@domain';
+           $mail->Password = 'passwordemail';
+           $mail->SMTPSecure = 'ssl';
+           $mail->Port     = 465;
+           $mail->setFrom('nama@domain', 'Nama Pengirim'); 
+           $mail->addReplyTo('nama@domain', '');
+           $mail->addAddress($this->input->post('email'));
+           $mail->isHTML(true);
+            
+                    
 
         if ($type == 'verify') {
-            $this->email->subject('Account Verification');
-            $this->email->message('Click this link to verify you account : <a href="' . base_url() . 'auth/verify?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Activate</a>');
+            $mail->Subject = ("Account Verification");
+            $mail->Body = ('Click this link to verify you account : <a href="' . base_url() . 'auth/verify?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Activate</a>');
         } else if ($type == 'forgot') {
-            $this->email->subject('Reset Password');
-            $this->email->message('Click this link to reset your password : <a href="' . base_url() . 'auth/resetpassword?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Reset Password</a>');
+            $mail->Subject= ("Account Reset");
+            $mail->Body = ('Click this link to reset your password : <a href="' . base_url() . 'auth/resetpassword?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Reset Password</a>');
         }
 
-        if ($this->email->send()) {
+        if ($mail->send()) {
             return true;
         } else {
-            echo $this->email->print_debugger();
+            echo $mail->print_debugger();
             die;
         }
     }
