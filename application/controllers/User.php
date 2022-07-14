@@ -66,7 +66,6 @@ class User extends CI_Controller
                         unlink(FCPATH . 'assets/img/profile/' . $old_image);
                     }
                     $new_image = $this->upload->data('file_name');
-                    $this->db->set('image', $new_image);
                 } else {
                     $this->session->set_flashdata('message', $this->upload->display_errors());
                     redirect('user/edit');
