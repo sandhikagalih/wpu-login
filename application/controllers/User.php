@@ -67,7 +67,8 @@ class User extends CI_Controller
 
                 $config['allowed_types'] = 'gif|jpg|png';
                 $config['max_size']      = '4096';
-                $config['upload_path'] = './assets/img/profile/';
+                // Kita upload di folder resize untuk di resize
+                $config['upload_path'] = './assets/img/profile/resize/';
 
                 $this->load->library('upload', $config);
 
@@ -80,6 +81,27 @@ class User extends CI_Controller
 
                     // Nama gambar sudah random
                     $new_image = $this->upload->data('file_name');
+
+                    // Config untuk resize image
+                    $configImg['source_image'] = $config['upload_path'] . $new_image; // path image yang diupload (sesuai $config[upload path])
+                    $configImg['new_image'] = './assets/img/profile/' . $new_image; // path baru untuk menyimpan gambar yang sudah diresize
+                    $configImg['quality'] = 100;
+                    $configImg['maintain_ratio'] = TRUE;
+                    $configImg['width'] = 250;
+                    $configImg['height'] = 250;
+
+                    $this->load->library('image_lib', $configImg);
+                    $this->image_lib->resize(); // Resize gambar
+
+                    // Jika sudah resize
+                    if ($this->image_lib->resize()) {
+                        // maka hapus foto original
+                        unlink(FCPATH . 'assets/img/profile/resize/' . $new_image);
+                    } else {
+                        // tapi jika error dalam resizing
+                        echo $this->image_lib->display_errors();
+                        die();
+                    }
                 } else {
                     $this->session->set_flashdata('message', $this->upload->display_errors());
                     redirect('user/edit');
