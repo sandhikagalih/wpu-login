@@ -61,6 +61,10 @@ class User extends CI_Controller
             $image = $_FILES['image']['name'];
 
             if ($image) {
+                // Generate random image name
+                $this->load->helper('string');
+                $config['file_name'] = random_string('alnum', 16);
+
                 $config['allowed_types'] = 'gif|jpg|png';
                 $config['max_size']      = '4096';
                 $config['upload_path'] = './assets/img/profile/';
@@ -73,6 +77,8 @@ class User extends CI_Controller
                     if ($old_image != 'default.png') {
                         unlink(FCPATH . 'assets/img/profile/' . $old_image);
                     }
+
+                    // Nama gambar sudah random
                     $new_image = $this->upload->data('file_name');
                     $this->db->set('image', $new_image);
                 } else {
