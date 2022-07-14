@@ -48,6 +48,14 @@ class User extends CI_Controller
         } else {
             $name = $this->input->post('name');
             $email = $this->input->post('email');
+            $deletePic = $this->input->post('deletePic');
+            $old_image = $this->user['image'];
+
+            // Jika delete current picture di check
+            if (!is_null($deletePic)) {
+                unlink(FCPATH . 'assets/img/profile/' . $old_image);
+                $old_image = 'default.png';
+            }
 
             // cek jika ada gambar yang akan diupload
             $image = $_FILES['image']['name'];
@@ -74,7 +82,13 @@ class User extends CI_Controller
                 }
             }
 
-            $this->User_model->editProfile($name, $email, $new_image);
+            if (isset($new_image)) {
+                // Jika user input gambar baru
+                $this->User_model->editProfile($name, $email, $new_image);
+            } else {
+                // Jika user tidak input gambar baru (pakai gambar lama)
+                $this->User_model->editProfile($name, $email, $old_image);
+            }
 
             $this->session->set_flashdata('message', 'edited');
             redirect('user');
