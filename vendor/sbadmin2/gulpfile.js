@@ -20,7 +20,7 @@ const pkg = require('./package.json');
 const banner = ['/*!\n',
   ' * Start Bootstrap - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
   ' * Copyright 2013-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
-  ' * Licensed under <%= pkg.license %> (https://github.com/BlackrockDigital/<%= pkg.name %>/blob/master/LICENSE)\n',
+  ' * Licensed under <%= pkg.license %> (https://github.com/StartBootstrap/<%= pkg.name %>/blob/master/LICENSE)\n',
   ' */\n',
   '\n'
 ].join('');
@@ -91,7 +91,6 @@ function css() {
     }))
     .on("error", sass.logError)
     .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
       cascade: false
     }))
     .pipe(header(banner, {
@@ -127,7 +126,7 @@ function js() {
 // Watch files
 function watchFiles() {
   gulp.watch("./scss/**/*", css);
-  gulp.watch("./js/**/*", js);
+  gulp.watch(["./js/**/*", "!./js/**/*.min.js"], js);
   gulp.watch("./**/*.html", browserSyncReload);
 }
 

@@ -1,5 +1,4 @@
 .object-cover {
-    object-fit: cover;
-    object-position: center;
+	object-fit: cover;
+	object-position: center;
 }
-/* Agar foto profil pada pojok kanan atas topbar posisinya di tengah
