@@ -7,6 +7,12 @@
     <div class="row">
         <div class="col-lg-6">
 
+            <?php foreach ($this->session->flashdata() as $key => $val) : ?>
+                <div class="alert <?= $key; ?>" role="alert">
+                    <?= $val; ?>
+                </div>
+            <?php endforeach; ?>
+
             <?php if (validation_errors()) : ?>
                 <div class="alert alert-danger" role="alert">
                     <?= validation_errors(); ?>
@@ -31,7 +37,7 @@
                             <td class="text-capitalize"><?= $r['role']; ?></td>
                             <td>
                                 <a href="<?= base_url('admin/roleaccess/') . $r['id']; ?>" class="badge badge-warning">Access</a>
-                                <a href="#" class="badge badge-primary" onclick="alert('Features temporarily inaccessible')">Edit</a>
+                                <a href="<?= base_url('admin/editrole/') . $r['id']; ?>" class="badge badge-primary">Edit</a>
                                 <a href="#" class="badge badge-danger" onclick="alert('Features temporarily inaccessible')">Delete</a>
                             </td>
                         </tr>

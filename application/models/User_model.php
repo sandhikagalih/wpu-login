@@ -72,6 +72,18 @@ class User_model extends CI_Model
         $this->db->insert('user_role', $data);
     }
 
+    public function editRole($data)
+    {
+        $this->db->set('role', $data['role']);
+        $this->db->where('id', $data['id']);
+        $this->db->update('user_role');
+    }
+
+    public function deleteRole($id)
+    {
+        $this->db->delete('user_role', ['id' => $id]);
+    }
+
     public function accessMenu($role_id, $menu_id)
     {
         $this->db->where('role_id', $role_id);

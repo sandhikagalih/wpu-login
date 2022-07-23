@@ -57,6 +57,38 @@ class Admin extends CI_Controller
         }
     }
 
+    public function editRole($id = null)
+    {
+        if (is_null($id)) {
+            redirect('admin/role');
+        }
+
+        $data['title'] = 'Edit Role';
+        $data['user'] = $this->user;
+        $data['menu'] = $this->menu;
+        $data['subMenu'] = $this->subMenu;
+
+        $data['role'] = $this->User_model->getRole($id);
+
+        $this->form_validation->set_rules('role', 'Role Name', 'required');
+
+        if (!$this->form_validation->run()) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/edit-role', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data = [
+                'id' => $this->input->post('id'),
+                'role' => $this->input->post('role')
+            ];
+            $this->User_model->editRole($data);
+            $this->session->set_flashdata('alert-success', 'Role has been edited');
+            redirect('admin/role');
+        }
+    }
+
     public function roleAccess($role_id = null)
     {
         if (is_null($role_id)) {
