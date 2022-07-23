@@ -4,12 +4,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Admin extends CI_Controller
 {
     private $user, $menu, $subMenu;
-    
+
     public function __construct()
     {
         parent::__construct();
         is_logged_in();
-        
+
         $this->load->model('User_model');
         $this->user = $this->User_model->getUser($this->session->userdata('email'));
         $this->menu = $this->User_model->getSideMenu($this->session->userdata('role_id'));
@@ -39,11 +39,22 @@ class Admin extends CI_Controller
 
         $data['role'] = $this->User_model->getRoles();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/role', $data);
-        $this->load->view('templates/footer');
+        $this->form_validation->set_rules('role', 'Role', 'required');
+
+        if (!$this->form_validation->run()) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/role', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data = [
+                'role' => $this->input->post('role')
+            ];
+            $this->User_model->addRole($data);
+            $this->session->set_flashdata('alert-success', 'Role has been added');
+            redirect('admin/role');
+        }
     }
 
     public function roleAccess($role_id = null)
@@ -52,7 +63,7 @@ class Admin extends CI_Controller
             redirect('auth/blocked');
             die();
         }
-        
+
         $data['title'] = 'Role Access';
         $data['user'] = $this->user;
         $data['menu'] = $this->menu;

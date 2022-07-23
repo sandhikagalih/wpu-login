@@ -67,6 +67,11 @@ class User_model extends CI_Model
         return $this->db->get_where('user_role', ['id' => $id])->row_array();
     }
 
+    public function addRole($data)
+    {
+        $this->db->insert('user_role', $data);
+    }
+
     public function accessMenu($role_id, $menu_id)
     {
         $this->db->where('role_id', $role_id);

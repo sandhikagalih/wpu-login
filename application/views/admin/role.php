@@ -7,6 +7,12 @@
     <div class="row">
         <div class="col-lg-6">
 
+            <?php if (validation_errors()) : ?>
+                <div class="alert alert-danger" role="alert">
+                    <?= validation_errors(); ?>
+                </div>
+            <?php endif; ?>
+
             <a href="" class="btn btn-primary mb-3 float-right" data-toggle="modal" data-target="#newRoleModal">Add New Role</a>
 
             <table class="table table-hover table-striped">
