@@ -89,6 +89,22 @@ class Admin extends CI_Controller
         }
     }
 
+    public function deleteRole($id = null)
+    {
+        // Jika id = null
+        if ($id <= 2) {
+            // dan jika id = 1 atau 2 (Role admin dan member tidak boleh dihapus)
+            if ($id > 0) {
+                $this->session->set_flashdata('alert-danger', 'This role cannot be deleted');
+            }
+            redirect('admin/role');
+        }
+
+        $this->User_model->deleteRole($id);
+        $this->session->set_flashdata('alert-success', 'Role has been deleted');
+        redirect('admin/role');
+    }
+
     public function roleAccess($role_id = null)
     {
         if (is_null($role_id)) {
