@@ -68,7 +68,7 @@ class Menu extends CI_Controller
                 'menu_id' => $this->input->post('menu_id'),
                 'url' => $this->input->post('url'),
                 'icon' => $this->input->post('icon'),
-                'is_active' => $this->input->post('is_active')
+                'is_active' => (is_null($this->input->post('is_active'))) ? 0 : 1
             ];
             $this->Menu_model->addSubMenu($data);
             $this->session->set_flashdata('alert-success', 'New sub menu has been added!');
