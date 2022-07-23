@@ -132,7 +132,7 @@ class Menu extends CI_Controller
                     'is_active' => $post['is_active']
                 ];
                 $this->Menu_model->editSubMenu($data);
-                $this->session->set_flashdata('message', 'Sub menu changed successfully');
+                $this->session->set_flashdata('alert-success', 'Sub menu changed successfully');
                 redirect('menu/submenu');
             }
         }
@@ -159,7 +159,7 @@ class Menu extends CI_Controller
                 redirect('menu/submenu');
             }
             $this->Menu_model->deleteSubMenu($id);
-            $this->session->set_flashdata('message', 'Sub menu has been deleted');
+            $this->session->set_flashdata('alert-success', 'Sub menu has been deleted');
             redirect('menu/submenu');
         } else {
             redirect('auth/blocked');
