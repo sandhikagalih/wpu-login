@@ -129,7 +129,8 @@ class Menu extends CI_Controller
                     'title' => $post['title'],
                     'url' => $post['url'],
                     'icon' => $post['icon'],
-                    'is_active' => $post['is_active']
+                    'is_active' => ($id <= 2) ? 1 : $post['is_active']
+                    // Menu Dashboard dan My Profile harus selalu active
                 ];
                 $this->Menu_model->editSubMenu($data);
                 $this->session->set_flashdata('alert-success', 'Sub menu changed successfully');

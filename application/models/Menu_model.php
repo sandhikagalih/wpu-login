@@ -44,6 +44,17 @@ class Menu_model extends CI_Model
         return $this->db->query($query)->result_array();
     }
 
+    public function getSubMenuIsActive($url)
+    {
+        $subMenu = $this->db->get_where('user_sub_menu', ['url' => $url]);
+        // Jika submenu tidak ada pada db (seperti roleaccess) maka anggap submenu tsb active
+        if ($subMenu->num_rows() < 1) {
+            return ['is_active' => 1];
+        }
+
+        return $subMenu->row_array()['is_active'];
+    }
+
     public function getSubMenuById($id)
     {
         return $this->db->get_where('user_sub_menu', ['id' => $id])->row_array();

@@ -6,6 +6,11 @@ function is_logged_in()
 {
     $ci = get_instance();
     $menu = $ci->uri->segment(1);
+    $subMenu = $ci->uri->segment(2);
+    if (!is_null($subMenu)) {
+        // Untuk membantu pengecekan pada database di variable is_active
+        $subMenu = '/' . $subMenu;
+    }
 
     // Jika belum login
     if (!$ci->session->userdata('email')) {
@@ -34,11 +39,12 @@ function is_logged_in()
         }
 
         $ci->load->model('Menu_model');
+        $is_active = $ci->Menu_model->getSubMenuIsActive($menu . $subMenu);
         $menu_id = $ci->Menu_model->getMenu($menu)['id'];
         $userAccess = $ci->Menu_model->userAccess($role_id, $menu_id);
 
-        // Jika user mengakses menu yang seharusnya tidak boleh
-        if ($userAccess->num_rows() < 1) {
+        // Jika user mengakses menu yang dinonaktifkan atau Jika user mengakses menu yang seharusnya tidak boleh
+        if ($is_active == 0 || $userAccess->num_rows() < 1) {
             redirect('auth/blocked');
             die();
         }
