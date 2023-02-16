@@ -1,4 +1,11 @@
 The MIT License (MIT)
+Test Resolusi Wpu
+- Javascript
+  *ES6
+    *Framework Javascript
+    ^Vue
+      ^React
+        ^Angular
 
 Copyright (c) 2014 - 2019, British Columbia Institute of Technology
 
